@@ -1,0 +1,12 @@
+package org.krlib.dashboard;
+
+import javafx.scene.control.Button;
+
+public class MainController {
+	public Button btn_demo;
+	
+	public void btn_demo_Click() {
+		System.out.println("btn_demo was cLicked");
+	}
+	
+}

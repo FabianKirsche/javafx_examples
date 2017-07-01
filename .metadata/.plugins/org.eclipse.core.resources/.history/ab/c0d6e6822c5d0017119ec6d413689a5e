@@ -1,0 +1,22 @@
+package org.krlib.dashboard.clock;
+
+import javafx.application.*;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.layout.Pane;
+
+public class Clock extends Pane{
+	
+	public Clock() {
+		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("clock.fxml"));
+		fxmlLoader.setRoot(this);
+		fxmlLoader.setController(this);
+		
+		try {
+			fxmlLoader.load();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+}

@@ -1,0 +1,10 @@
+package org.krlib.dashboard.clock;
+
+import javafx.application.*;
+import javafx.scene.Node;
+
+public class Clock{
+	
+	
+
+}
