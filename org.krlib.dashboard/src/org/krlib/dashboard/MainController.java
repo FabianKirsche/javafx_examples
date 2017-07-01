@@ -10,7 +10,5 @@ public class MainController {
 	
 	public void btn_demo_Click() {
 		System.out.println("btn_demo was clicked");
-		
 	}
-	
 }

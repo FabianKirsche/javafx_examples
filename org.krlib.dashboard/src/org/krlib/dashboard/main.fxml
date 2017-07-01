@@ -13,7 +13,7 @@
 			<Label text="I love bacon"/>
 		    <Button text="btn_demo" fx:id="btn_demo" onAction="#btn_demo_Click"/>
 			<Button text="btn2"/>
-			<Clock />
+			<Clock text="testText"/>
 		</HBox>
 	</Pane>
 </VBox>
