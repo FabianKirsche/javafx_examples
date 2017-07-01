@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<?import javafx.scene.layout.Pane?>
-
-<Pane prefWidth="320" prefHeight="240" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.krlib.dashboard.clock.ClockController">
-	<Label fx:id="lbl_clock" text="02:35" />
-</Pane>
-

@@ -1,5 +1,0 @@
-package org.krlib.dashboard.clock;
-
-public class ClockController {
-
-}

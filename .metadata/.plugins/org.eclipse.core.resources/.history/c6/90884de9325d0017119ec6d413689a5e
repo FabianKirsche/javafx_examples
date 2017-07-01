@@ -1,7 +1,0 @@
-package org.krlib.dashboard.clock;
-
-import javafx.scene.control.Label;
-
-public class ClockController {
-	public Label lbl_clock;
-}
