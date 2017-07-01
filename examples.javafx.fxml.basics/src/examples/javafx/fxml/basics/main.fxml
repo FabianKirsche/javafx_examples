@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+	
+
+
+<BorderPane prefHeight="720" prefWidth="1280" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml"
+			fx:controller="examples.javafx.fxml.basics.Controller">
+	<center>
+		<Label text="I love bacon"/>
+	    <Button text="Submit" fx:id="btn_demo" onAction="#btn_demo_Click"/>
+	</center>
+
+</BorderPane>
