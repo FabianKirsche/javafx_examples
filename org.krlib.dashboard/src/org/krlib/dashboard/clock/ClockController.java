@@ -1,6 +1,5 @@
 package org.krlib.dashboard.clock;
 
-import javafx.beans.property.StringProperty;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
