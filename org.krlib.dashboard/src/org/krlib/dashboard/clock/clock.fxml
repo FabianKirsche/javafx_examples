@@ -1,11 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 
-<fx:root type="javafx.scene.layout.VBox" prefWidth="340" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml">
-	<Label fx:id="lbl_clock" text="DemoText" />
-	<Button fx:id="btn_demo" onAction="#btn_demo_Clicked" text="Clock Button" />
+<fx:root type="javafx.scene.layout.VBox" prefWidth="320" prefHeight="240" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml">
+	
+	<VBox>
+		<HBox>
+			<Label fx:id="lbl_curDate" text="Wednesday -  July 5th 2017"/>
+		</HBox>
+		<Pane>
+			<Label fx:id="lbl_mainClock" text="06:32"/>
+			<Label fx:id="lbl_mainClockSeconds" text="10"/>
+		</Pane>
+		<HBox>
+			<HBox>
+				<ImageView fitHeight="32" fitWidth="32">
+					<image>
+						<Image  url="@images/alarm_clock1.png" />
+					</image>
+				</ImageView>
+				<Label fx:id="lbl_alarm1" text="06:30"/>
+			</HBox>
+			<HBox>
+				<ImageView fitHeight="32" fitWidth="32">
+					<image>
+						<Image  url="@images/alarm_clock2.png" />
+					</image>
+				</ImageView>
+				<Label fx:id="lbl_alarm2" text="07:00"/>
+			</HBox>
+		</HBox>
+		<HBox>
+			<ImageView fitHeight="32" fitWidth="32">
+				<image>
+					<Image url="@images/music_note.png" />
+				</image>
+			</ImageView>
+			<Label fx:id="lbl_alarmSound" text="YTLiveStream Trap City Radio..."/>
+		</HBox>
+	</VBox>
+	
 </fx:root>
 
