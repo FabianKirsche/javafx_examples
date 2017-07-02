@@ -6,10 +6,25 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class Clock extends GridPane{
-	@FXML private Label lbl_clock;
+	@FXML private Label lbl_curDate_WeekDay;
+	@FXML private Label lbl_curDate_divider;
+	@FXML private Label lbl_curDate_longDate;
+	@FXML private Label lbl_mainClock;
+	@FXML private Label lbl_alarmClock1;
+	@FXML private Label lbl_alarmClock2;
+	@FXML private Label lbl_alarmSound;
 	
+	private ClockModel cm;
 	
 	/***************************************************************************
      *                                                                         *
@@ -26,7 +41,18 @@ public class Clock extends GridPane{
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+		
+		cm = new ClockModel();
+		
+		//Bind labels to ClockModels Properties
+		lbl_curDate_WeekDay.textProperty().bind(cm.getWeekDayProperty());
+		lbl_curDate_longDate.textProperty().bind(cm.getDispDateProperty());
+		lbl_mainClock.textProperty().bind(cm.getDispTimeProperty());
 	}
+	
+	
+	
+	
 	
 	
 	/***************************************************************************
@@ -37,9 +63,6 @@ public class Clock extends GridPane{
     /**
      * The text to display in the label.
      */
-	public final String getText() {return lbl_clock.getText();}
-	public final void setText(String pValue) {lbl_clock.setText(pValue);}
-	public StringProperty textProperty() {return lbl_clock.textProperty();}
 	
 	
 	/***************************************************************************
@@ -47,4 +70,5 @@ public class Clock extends GridPane{
      * Methods                                                                 *
      *                                                                         *
      **************************************************************************/
+	
 }
