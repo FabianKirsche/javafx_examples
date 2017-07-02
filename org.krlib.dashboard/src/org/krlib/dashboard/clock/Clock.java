@@ -5,9 +5,9 @@ import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.GridPane;
 
-public class Clock extends VBox{
+public class Clock extends GridPane{
 	@FXML private Label lbl_clock;
 	
 	
@@ -47,7 +47,4 @@ public class Clock extends VBox{
      * Methods                                                                 *
      *                                                                         *
      **************************************************************************/
-	public void btn_demo_Clicked() {
-		System.out.println("Clock's btn_demo was clicked! Hoorayy");
-	}
 }
