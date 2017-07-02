@@ -2,9 +2,6 @@ package org.krlib.dashboard.clock;
 
 import java.util.Calendar;
 import java.util.Locale;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -21,7 +18,7 @@ public class ClockModel {
      *                                                                         *
      **************************************************************************/
 	public ClockModel() {
-		InitializeTimer();
+		UpdateTime();
 	}
 	
 	/***************************************************************************
@@ -107,22 +104,14 @@ public class ClockModel {
      * Methods                                                                 *
      *                                                                         *
      **************************************************************************/
-	private void InitializeTimer() {
-		ScheduledExecutorService ses = Executors.newSingleThreadScheduledExecutor();
-		ses.scheduleAtFixedRate(new Runnable() {
-			@Override
-			public void run() {
-				UpdateTime();
-			}
-		}, 0, 1, TimeUnit.SECONDS);
-	}
+	
 	
 	private void UpdateTime() {
 		//Get current time/date
 		cal = null;
 		cal = Calendar.getInstance();
 		
-		this.setHour(cal.get(Calendar.HOUR));
+		this.setHour(cal.get(Calendar.HOUR_OF_DAY));
 		this.setMinute(cal.get(Calendar.MINUTE));
 		this.setSecond(cal.get(Calendar.SECOND));
 		
@@ -130,7 +119,7 @@ public class ClockModel {
 		this.setMonth(cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.US));
 		this.setDay(cal.get(Calendar.DAY_OF_MONTH));
 		this.setWeekDay(cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.US));
-		System.out.println("updated: " + this.getMinute() + "." + this.getSecond());
+		System.out.println("updated: " + this.getHour() + ":" + this.getMinute() + "." + this.getSecond());
 	}
 	
 	
