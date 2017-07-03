@@ -62,7 +62,7 @@
       </Pane>
       <HBox fx:id="hb_alarmClock1" alignment="CENTER" onMouseClicked="#hb_alarmClock1_OnMouseClicked" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="2">
          <children>
-            <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="iv_alarmClock1" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@images/alarm_clock1.png" />
                </image>
@@ -82,7 +82,7 @@
       </HBox>
       <HBox alignment="CENTER" layoutX="20.0" layoutY="164.0" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
          <children>
-            <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="ic_alarmClock2" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@images/alarm_clock2.png" />
                </image>

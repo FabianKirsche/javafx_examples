@@ -8,11 +8,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import org.krlib.dashboard.clock.Clock?>
 	
-<BorderPane prefWidth="1280" prefHeight="720" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml"
-			fx:controller="org.krlib.dashboard.MainController">
+<BorderPane prefWidth="1280" prefHeight="720" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml "
+			fx:controller="org.krlib.dashboard.MainController" stylesheets="@style/main.css">
 	<left>
 		<VBox>
-			<Clock />
+			<Clock fx:id="clk_main" />
 		</VBox>
 	</left>
 </BorderPane>

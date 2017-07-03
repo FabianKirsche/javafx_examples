@@ -8,7 +8,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class ClockModel {
+public class TimeModel {
 	private Calendar cal;
 	
 	
@@ -17,9 +17,10 @@ public class ClockModel {
      * Constructors                                                            *
      *                                                                         *
      **************************************************************************/
-	public ClockModel() {
+	public TimeModel() {
 		UpdateTime();
 	}
+	
 	
 	/***************************************************************************
      *                                                                         *
@@ -98,14 +99,11 @@ public class ClockModel {
     public StringProperty getDispDateProperty() {return dispDate;}
     
     
-	
 	/***************************************************************************
      *                                                                         *
      * Methods                                                                 *
      *                                                                         *
      **************************************************************************/
-	
-	
 	private void UpdateTime() {
 		//Get current time/date
 		cal = null;
