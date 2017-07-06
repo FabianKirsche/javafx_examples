@@ -110,7 +110,7 @@
                   <Insets top="5.0" />
                </HBox.margin>
             </ImageView>
-            <Label fx:id="lbl_alarmSound" text="YT-Livestream: Trap City Radio">
+            <Label fx:id="lbl_alarmSound" text="NO ALARM SOUND SET!">
                <font>
                   <Font size="14.0" />
                </font>

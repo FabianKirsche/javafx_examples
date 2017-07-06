@@ -1,6 +1,14 @@
 package org.krlib.dashboard.clock;
 
+import org.krlib.musicPlayer.*;
+import org.krlib.musicPlayer.api.IMusicPlayer;
+import org.krlib.musicPlayer.api.MusicPlayerFactory;
+import org.krlib.musicPlayer.localFilePlayer.LocalFilePlayer;
+
+import java.io.File;
 import java.io.IOException;
+import java.net.URL;
+import java.nio.file.FileSystems;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -33,8 +41,8 @@ interface IClockListener{
 public class Clock extends GridPane{
 	private Locale DEFAULT_LOCALE = Locale.GERMANY;
 	
-	private Integer DEFAULT_ALARM1_HOUR = 9;
-	private Integer DEFAULT_ALARM1_MINUTE = 51;
+	private Integer DEFAULT_ALARM1_HOUR = 11;
+	private Integer DEFAULT_ALARM1_MINUTE = 46;
 	private Boolean DEFAULT_ALARM1_ACTIVE = true;
 	private Integer DEFAULT_ALARM2_HOUR = 9;
 	private Integer DEFAULT_ALARM2_MINUTE = 52;
@@ -53,6 +61,8 @@ public class Clock extends GridPane{
 	SimpleDateFormat hourMinuteSecondFormat = new SimpleDateFormat("hh:mm:ss");
 	
 	private List<IClockListener> listeners = new ArrayList<IClockListener>();
+	
+	private IMusicPlayer musicPlayer;
 	
 	
 	/***************************************************************************
@@ -105,6 +115,10 @@ public class Clock extends GridPane{
 	private void setDefaults() {
 		lbl_alarmClock1.setText(alarm1.getHour() + ":" + alarm1.getMinute());
 		lbl_alarmClock2.setText(alarm2.getHour() + ":" + alarm2.getMinute());
+		
+		//Set default alarm sound
+		String path = new File(getClass().getResource("sounds/Alarm-tone.mp3").getPath()).getAbsolutePath();
+		setAlarmSong(path);
 	}
 	
 	private void setupListeners() {
@@ -176,14 +190,25 @@ public class Clock extends GridPane{
 		ss.start();
 	}
 	
-	protected void alarmStoppedRinging() {
-		lbl_mainClock.setStyle("-fx-text-fill: black;");
-		System.out.println("Alarm stopped ringing!");
+	public void setAlarmSong(String pValue) {
+		musicPlayer = MusicPlayerFactory.createMusicPlayer(pValue);
+		lbl_alarmSound.setText(musicPlayer.getSongName());
 	}
 	
 	protected void alarmStartedRinging() {
 		lbl_mainClock.setStyle("-fx-text-fill: red;");
-		System.out.println("Alarm 2 started ringing!");
+		System.out.println("Alarm started ringing!");
+		
+		//Start playing music...
+		musicPlayer.play();
+	}
+	
+	protected void alarmStoppedRinging() {
+		lbl_mainClock.setStyle("-fx-text-fill: black;");
+		System.out.println("Alarm stopped ringing!");
+
+		//Stop playing music...
+		musicPlayer.stop();
 	}
 	
 	
