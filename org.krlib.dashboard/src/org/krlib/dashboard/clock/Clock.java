@@ -1,8 +1,11 @@
 package org.krlib.dashboard.clock;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
-
+import java.util.List;
+import java.util.Locale;
 import javafx.concurrent.ScheduledService;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
@@ -14,12 +17,27 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.util.Duration;
 
+
+/***************************************************************************
+ * Event Interface                                                         *
+ **************************************************************************/
+interface IClockListener{
+	public void tick();
+}
+
+/***************************************************************************
+ *                                                                         *
+ * Class declaration & global variables                                    *
+ *                                                                         *
+ **************************************************************************/
 public class Clock extends GridPane{
-	private Integer DEFAULT_ALARM1_HOUR = 2;
-	private Integer DEFAULT_ALARM1_MINUTE = 42;
+	private Locale DEFAULT_LOCALE = Locale.GERMANY;
+	
+	private Integer DEFAULT_ALARM1_HOUR = 9;
+	private Integer DEFAULT_ALARM1_MINUTE = 51;
 	private Boolean DEFAULT_ALARM1_ACTIVE = true;
-	private Integer DEFAULT_ALARM2_HOUR = 2;
-	private Integer DEFAULT_ALARM2_MINUTE = 38;
+	private Integer DEFAULT_ALARM2_HOUR = 9;
+	private Integer DEFAULT_ALARM2_MINUTE = 52;
 	private Boolean DEFAULT_ALARM2_ACTIVE = true;
 	
 	@FXML private Label lbl_curDate_WeekDay;
@@ -31,8 +49,11 @@ public class Clock extends GridPane{
 	@FXML private Label lbl_alarmSound;
 	@FXML private HBox hb_alarmClock1;
 
-	private Integer prevMinute;
-	private TimeModel tm;
+	SimpleDateFormat hourMinuteFormat = new SimpleDateFormat("hh:mm");
+	SimpleDateFormat hourMinuteSecondFormat = new SimpleDateFormat("hh:mm:ss");
+	
+	private List<IClockListener> listeners = new ArrayList<IClockListener>();
+	
 	
 	/***************************************************************************
      *                                                                         *
@@ -40,6 +61,7 @@ public class Clock extends GridPane{
      *                                                                         *
      **************************************************************************/
 	public Clock() {
+		//FXML default init
 		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("clock.fxml"));
 		fxmlLoader.setRoot(this);
 		fxmlLoader.setController(this);
@@ -50,9 +72,10 @@ public class Clock extends GridPane{
 			throw new RuntimeException(e);
 		}
 		
+		//General init
 		setDefaults();
-		setListeners();
-		initializeTimer();
+		setupListeners();
+		initializeTick();
 	}
 	
 	/***************************************************************************
@@ -61,93 +84,106 @@ public class Clock extends GridPane{
      *                                                                         *
      **************************************************************************/
 	
-	public Alarm alarm1 = new Alarm(DEFAULT_ALARM1_HOUR, DEFAULT_ALARM1_MINUTE, DEFAULT_ALARM1_ACTIVE);
-	public Alarm alarm2 = new Alarm(DEFAULT_ALARM2_HOUR, DEFAULT_ALARM2_MINUTE, DEFAULT_ALARM2_ACTIVE);
+	public Alarm alarm1 = new Alarm(this, DEFAULT_ALARM1_HOUR, DEFAULT_ALARM1_MINUTE, DEFAULT_ALARM1_ACTIVE);
+	public Alarm alarm2 = new Alarm(this, DEFAULT_ALARM2_HOUR, DEFAULT_ALARM2_MINUTE, DEFAULT_ALARM2_ACTIVE);
 		
 	/***************************************************************************
      *                                                                         *
      * Methods                                                                 *
      *                                                                         *
      **************************************************************************/
+	public void addListener(IClockListener pValue) {
+		listeners.add(pValue);
+	}
+	
+	private void notifyListeners() {
+		for (IClockListener icl : listeners) {
+			icl.tick();
+		}
+	}
+	
 	private void setDefaults() {
-		prevMinute = Calendar.getInstance().get(Calendar.MINUTE);
 		lbl_alarmClock1.setText(alarm1.getHour() + ":" + alarm1.getMinute());
 		lbl_alarmClock2.setText(alarm2.getHour() + ":" + alarm2.getMinute());
 	}
 	
-	private void setListeners() {
+	private void setupListeners() {
+		addListener(new IClockListener() {
+			
+			@Override
+			public void tick() {
+				Calendar calendar = Calendar.getInstance(DEFAULT_LOCALE);
+				
+				lbl_curDate_WeekDay.setText(calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, DEFAULT_LOCALE));
+				lbl_curDate_longDate.setText(calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, DEFAULT_LOCALE)
+												+ " " + calendar.get(Calendar.DAY_OF_MONTH) 
+												+ " " + calendar.get(Calendar.YEAR));
+				
+				lbl_mainClock.setText(hourMinuteFormat.format(calendar.getTime()));
+				
+				System.out.println("[" + hourMinuteSecondFormat.format(calendar.getTime()) + "]: Tick!");
+			}
+		});
+
 		alarm1.addListener(new IAlarmListener() {
 			
 			@Override
-			public void stoppedRinging() { alarmStoppedRinging(); }
+			public void stoppedRinging() { 
+				alarmStoppedRinging(); 
+			}
 			
 			@Override
-			public void startedRinging() { alarmStartedRinging(); }
+			public void startedRinging() { 
+				alarmStartedRinging(); 
+			}
 		});
 		
 		alarm2.addListener(new IAlarmListener() {
 			
 			@Override
-			public void stoppedRinging() { alarmStoppedRinging(); }
+			public void stoppedRinging() { 
+				alarmStoppedRinging(); 
+			}
 			
 			@Override
-			public void startedRinging() { alarmStartedRinging(); }
+			public void startedRinging() { 
+				alarmStartedRinging(); 
+			}
 		});
 	}
 	
-	private void initializeTimer() {
-		ScheduledService<TimeModel> ss = new ScheduledService<TimeModel>() {
-			@Override
-			protected Task<TimeModel> createTask() {
-				return new Task<TimeModel>() {
-					@Override
-					protected TimeModel call() throws Exception {
-						return new TimeModel();
-					}
+	private void initializeTick() {
+        ScheduledService<Void> ss = new ScheduledService<Void>() {
+        	@Override
+        	protected Task<Void> createTask() {
+        		return new Task<Void>() {
+        			@Override
+        			protected Void call() throws Exception {
+        				return null;
+        			}
 				};
-			}
+        	}
 		};
-		
 		ss.setPeriod(Duration.seconds(1));
 		ss.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
 			
 			@Override
 			public void handle(WorkerStateEvent event) {
-				tm = ss.getValue();
+				notifyListeners(); //here because here it's executed on the "gui"-thread
 				
-				lbl_curDate_WeekDay.setText(tm.getWeekDay());
-				lbl_curDate_longDate.setText(tm.getDispDate());
-				lbl_mainClock.setText(tm.getDispTime());
-				
-				//Execute once a minute
-				if (prevMinute != tm.getMinute()) {
-					System.out.println("\tprevMinute: " + prevMinute + "\n\ttm.getMinute(): " + tm.getMinute());
-					
-					CheckForAlarm(tm);
-				}
-				prevMinute = tm.getMinute();
 			}
 		});
 		ss.start();
 	}
 	
-	private void CheckForAlarm(TimeModel pTm) {
-		if (alarm1.getActive() && tm.getHour() == alarm1.getHour() && tm.getMinute() == alarm1.getMinute()) {
-			alarm1.ring();
-			System.out.println("alarm1.ring()");
-		}
-		else if (alarm2.getActive() && tm.getHour() == alarm2.getHour() && tm.getMinute() == alarm2.getMinute()) {
-			alarm2.ring();
-			System.out.println("alarm2.ring()");
-		}
-	}
-	
 	protected void alarmStoppedRinging() {
 		lbl_mainClock.setStyle("-fx-text-fill: black;");
+		System.out.println("Alarm stopped ringing!");
 	}
 	
 	protected void alarmStartedRinging() {
 		lbl_mainClock.setStyle("-fx-text-fill: red;");
+		System.out.println("Alarm 2 started ringing!");
 	}
 	
 	

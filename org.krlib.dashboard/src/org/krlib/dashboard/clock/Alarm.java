@@ -1,30 +1,49 @@
 package org.krlib.dashboard.clock;
 
 import java.util.*;
-
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
+
+/***************************************************************************
+ * Event Interface                                                         *
+ **************************************************************************/
 interface IAlarmListener {
 	void startedRinging();
 	void stoppedRinging();
 }
 
+
+/***************************************************************************
+ *                                                                         *
+ * Class declaration & global variables                                    *
+ *                                                                         *
+ **************************************************************************/
 public class Alarm {
-	private List<IAlarmListener> listeners = new ArrayList<IAlarmListener>(); //List of all objects subscribed to the event
-	
+	private List<IAlarmListener> listeners = new ArrayList<IAlarmListener>(); //List of all objects subscribed to the event	
+	private int previousMinute;
 	
 	/***************************************************************************
      *                                                                         *
      * Constructors                                                            *
      *                                                                         *
      **************************************************************************/
-	public Alarm(Integer pHour, Integer pMinute, Boolean pActive) {
+	public Alarm(Clock pClock, Integer pHour, Integer pMinute, Boolean pActive) {
 		setHour(pHour);
 		setMinute(pMinute);
 		setActive(pActive);
+		
+		addClockTickListener(pClock);
+
+		/*
+		 * The previous minute int is used to prevent the alarm to start ringing more than 
+		 * once a minute since the check gets performed every second and not every minute.
+		 * Here the previous minute is set to the current minute so the alarm doesn't go off
+		 * right after you started the application if it's the same time as the alarm is set to.
+		 */
+		previousMinute = Calendar.getInstance().get(Calendar.MINUTE);
 	}
 	
 	/***************************************************************************
@@ -63,17 +82,37 @@ public class Alarm {
 		listeners.add(pValue);
 	}
 	
-	public void notifyStartedRinging() {
+	private void notifyStartedRinging() {
 		for (IAlarmListener al : listeners) {
 			al.startedRinging();
 		}
 	}
 	
-	public void notifyStoppedRinging() {
+	private void notifyStoppedRinging() {
 		for (IAlarmListener al : listeners) {
 			al.stoppedRinging();
 		}
 	}
+	
+	private void addClockTickListener(Clock pClock) {
+		pClock.addListener(new IClockListener() {
+			
+			@Override
+			public void tick() {
+				Calendar calendar = Calendar.getInstance();
+				
+				if (getActive() 
+					&& calendar.get(Calendar.HOUR) == getHour()
+					&& calendar.get(Calendar.MINUTE) == getMinute()
+					&& previousMinute != calendar.get(Calendar.MINUTE)) {
+					
+					ring();
+				}
+				previousMinute = calendar.get(Calendar.MINUTE);
+			}
+		});
+	}
+	
 	
 	public void ring() {
 		if (!getRinging()) {
